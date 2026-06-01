@@ -1,0 +1,146 @@
+//==========================================================================================================================================
+
+//1-Versão(teste de como salvar uma coisa em arquivo texto primeira ideia fazer um núcleo de bloco de texto.
+
+
+//==========================================================================================================================================
+/* Codigo de projeto para um livro de receitas virtual onde permite acentos e salvar com titulos a receita
+e depois editar ou excluir. Tudo sendo salvo em um arquivo texto.*/
+
+/*
+
+1. Abrir e Fechar Arquivos:
+
+|FILE *fopen(const char *nome, const char *modo);: Abre um arquivo e retorna um ponteiro. Retorna NULL se falhar.
+|int fclose(FILE *ponteiro);: Fecha o arquivo, garantindo que os dados no buffer sejam gravados.
+
+Modos de abertura (modo):
+
+|"r": Abre para leitura (o arquivo deve existir).
+|"w": Cria um arquivo vazio para escrita (apaga o conteúdo se já existir).
+|"a": Abre para escrita no final do arquivo (append).
+|"r+", "w+", "a+": Modos de leitura/escrita.
+
+2. Leitura de Arquivos (Input):
+
+|int fgetc(FILE *ponteiro);: Lê um caractere por vez.
+|char *fgets(char *str, int num, FILE *ponteiro);: Lê uma linha inteira (ou string) de um arquivo.
+|int fscanf(FILE *ponteiro, const char *formato, ...);: Lê dados formatados, similar ao scanf.
+
+3. Escrita em Arquivos (Output):
+
+|int fputc(int caractere, FILE *ponteiro);: Escreve um caractere.
+|int fputs(const char *str, FILE *ponteiro);: Escreve uma string no arquivo.
+|int fprintf(FILE *ponteiro, const char *formato, ...);: Escreve dados formatados, similar ao printf.
+
+*/
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<conio.h>
+#include<windows.h>
+int main() {
+    int opcao;
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
+    system("cls");
+    printf("\n--- MENU BLOCA DE NOTAS ---\n");
+    printf("1 - Salvar nova nota\n");
+    printf("2 - Ler todas as notas\n");
+    printf("3 - Pesquisar na nota\n");
+    printf("0 - Sair\n");
+    printf("opção: ");
+    scanf("%d", &opcao);
+    while (opcao != 0){
+        switch (opcao) {
+            case 1: 
+                {
+                // Função para salvar texto
+            FILE *file;
+            char texto[200];
+            file = fopen("notas.txt", "a"); // "a" adiciona texto ao final
+            if (file == NULL) 
+                {
+                 printf("Erro ao abrir o arquivo!\n");
+                
+                }
+             printf("Digite o texto para salvar (max 200 caracteres):\n");
+             getchar(); // Limpar buffer do \n do scanf anterior
+             fgets(texto, sizeof(texto), stdin);
+             fprintf(file, "%s", texto); // Grava a string no arquivo
+             fclose(file);
+             printf("Texto salvo com sucesso!\n");
+            } 
+            break;      
+            case 2: 
+                {
+                 // Função para exibir todo o arquivo
+                FILE *file;
+                char linha[200];
+                file = fopen("notas.txt", "r"); // "r" modo leitura
+                if (file == NULL) 
+                {
+                  printf("Arquivo nao encontrado. Crie um nota primeiro.\n");
+                 
+                }
+                 printf("\n--- CONTEUDO DO ARQUIVO ---\n");
+                 while (fgets(linha, sizeof(linha), file) != NULL) // Le linha por linha
+                { 
+                 printf("%s", linha);
+                }
+                printf("\n---------------------------\n");
+                fclose(file);
+            }
+             break;
+            case 3:  
+                {
+            // Função para pesquisar uma palavra/frase no arquivo
+            FILE *file;
+            char linha[200];
+            char pesquisa[50];
+            int encontrada = 0;
+            file = fopen("notas.txt", "r");
+            if (file == NULL) 
+            {
+                printf("Arquivo nao encontrado!\n");
+                
+            }
+                printf("Digite a palavra/frase para pesquisar: ");
+                scanf("%s", pesquisa);
+
+                printf("\n--- RESULTADOS DA PESQUISA ---\n");
+                while (fgets(linha, sizeof(linha), file) != NULL) 
+            {
+            if (strstr(linha, pesquisa) != NULL) // Verifica se a string existe
+            { 
+                printf("%s", linha);
+                encontrada = 1;
+            }
+            }
+            if (!encontrada) printf("Texto nao encontrado.\n");
+            printf("\n-----------------------------\n");
+            fclose(file);
+            }
+            break;
+            case 0: printf("Saindo...\n"); 
+                break;
+            default: printf("Opcao invalida!\n");
+        }
+        printf("\nPressione qualquer tecla para continuar...\n");
+        getch();
+        system("cls");
+        printf("\n--- MENU BLOCA DE NOTAS ---\n");
+        printf("1 - Salvar nova nota\n");
+        printf("2 - Ler todas as notas\n");
+        printf("3 - Pesquisar na nota\n");
+        printf("0 - Sair\n");
+        printf("Escolha: ");
+        scanf("%d", &opcao);
+        system("cls");
+    }
+    printf("\nSaindo...");
+    printf("\nPressione qualquer tecla para fechar...\n");
+    getch();
+    return 0;
+}
